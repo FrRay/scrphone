@@ -1,0 +1,14 @@
+# Build outputs and local dependency cache
+.build/
+dist/
+# User-specific data
+settings.xml
+history.xml
+cache/
+*.WebView2/
+# IDE artifacts
+.vs/
+.vscode/
+bin/
+obj/
+*.user
