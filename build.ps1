@@ -41,11 +41,14 @@ if ($Package) {
     $scrcpyTarget = Join-Path $outputDir 'tools\scrcpy'
     New-Item -ItemType Directory -Force $scrcpyTarget | Out-Null
     Copy-Item -Path (Join-Path $scrcpyExtract 'scrcpy-win64-v5.0.1\*') -Destination $scrcpyTarget -Recurse -Force
-    $archive = Join-Path $root 'dist\ScrPhone-v0.1.0-win64.zip'
+    $version = (Get-Content -LiteralPath (Join-Path $root 'VERSION') -Raw).Trim()
+    if ($version -notmatch '^\d+\.\d+\.\d+$') { throw 'VERSION 必须使用主版本.次版本.修订号格式。' }
+    $archiveName = "ScrPhone-v${version}-win64.zip"
+    $archive = Join-Path $root ("dist\" + $archiveName)
     $files = @('ScrPhone.exe', 'Microsoft.Web.WebView2.Core.dll', 'Microsoft.Web.WebView2.WinForms.dll', 'runtimes', 'licenses', 'tools', 'README.md') | ForEach-Object { Join-Path $outputDir $_ }
     Compress-Archive -Path $files -DestinationPath $archive -CompressionLevel Optimal -Force
     $hash = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
-    Set-Content -LiteralPath "$archive.sha256" -Value "$hash  ScrPhone-v0.1.0-win64.zip" -Encoding ascii
+    Set-Content -LiteralPath "$archive.sha256" -Value "$hash  $archiveName" -Encoding ascii
     Write-Host "发布包：$archive"
     Write-Host "SHA-256：$hash"
 } else {

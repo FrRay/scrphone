@@ -21,6 +21,6 @@ jobs:
         with:
           name: ScrPhone-win64
           path: |
-            dist/ScrPhone-v0.1.0-win64.zip
-            dist/ScrPhone-v0.1.0-win64.zip.sha256
+            dist/ScrPhone-*-win64.zip
+            dist/ScrPhone-*-win64.zip.sha256
           if-no-files-found: error

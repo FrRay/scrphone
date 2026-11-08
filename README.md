@@ -4,7 +4,7 @@ ScrPhone 是 Windows 上的 Android 设备连接与应用投屏启动器。它�
 
 ## 下载与使用
 
-从仓库的 Releases 下载 `ScrPhone-v0.1.0-win64.zip`，解压后运行 `ScrPhone.exe`。发布包包含 Windows x64 版 scrcpy 5.0.1 和 ADB；使用其他版本时可在“启动参数”中修改工具路径。
+从仓库的 [Releases](https://github.com/FrRay/scrphone/releases/latest) 下载最新的 Windows x64 ZIP，解压后运行 `ScrPhone.exe`。发布包包含 Windows x64 版 scrcpy 5.0.1 和 ADB；使用其他版本时可在“启动参数”中修改工具路径。
 
 运行环境：Windows x64、.NET Framework 4.8.1，以及用于应用列表的 Microsoft Edge WebView2 Runtime。Windows 11 支持时使用系统云母背景；未安装 WebView2 Runtime 时，应用列表回退到原生控件。
 
@@ -32,7 +32,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -Package
 ```
 
-打包脚本下载并校验官方 scrcpy 5.0.1 Windows x64 发行包，生成 ZIP 和 SHA-256 文件。构建缓存和用户数据不纳入源码仓库或发布包。
+打包脚本下载并校验官方 scrcpy 5.0.1 Windows x64 发行包，按 `VERSION` 中的版本号生成 ZIP 和 SHA-256 文件。构建缓存和用户数据不纳入源码仓库或发布包。
 
 ## 项目结构
 
