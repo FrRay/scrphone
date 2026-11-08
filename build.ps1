@@ -22,7 +22,7 @@ if (-not (Test-Path -LiteralPath $compiler)) { throw '未找到 .NET Framework C
 $core = Join-Path $sdk 'lib\net462\Microsoft.Web.WebView2.Core.dll'
 $forms = Join-Path $sdk 'lib\net462\Microsoft.Web.WebView2.WinForms.dll'
 $sources = Get-ChildItem -LiteralPath (Join-Path $root 'src') -Filter '*.cs' | ForEach-Object { $_.FullName }
-& $compiler /nologo /target:winexe /platform:anycpu /optimize+ /codepage:65001 /reference:System.Windows.Forms.dll /reference:System.Drawing.dll /reference:System.Xml.dll /reference:System.Web.Extensions.dll /reference:Accessibility.dll "/reference:$core" "/reference:$forms" "/win32manifest:$root\src\app.manifest" "/out:$outputDir\ScrPhone.exe" $sources
+& $compiler /nologo /target:winexe /platform:anycpu /optimize+ /codepage:65001 /reference:System.Windows.Forms.dll /reference:System.Drawing.dll /reference:System.Xml.dll /reference:System.Web.Extensions.dll /reference:Accessibility.dll "/reference:$core" "/reference:$forms" "/win32manifest:$root\src\app.manifest" "/win32icon:$root\assets\scrphone.ico" "/out:$outputDir\ScrPhone.exe" $sources
 if ($LASTEXITCODE -ne 0) { throw "编译失败：$LASTEXITCODE" }
 Copy-Item -LiteralPath $core, $forms -Destination $outputDir -Force
 foreach ($arch in 'win-x86', 'win-x64', 'win-arm64') {

@@ -37,6 +37,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -Package
 ## 项目结构
 
 - `src`：窗口、设备连接、会话和应用列表代码。
+- `assets`：应用图标的 SVG 矢量源文件与多尺寸 Windows ICO。
 - `build.ps1`：依赖校验、构建及打包。
 - `licenses`：WebView2 SDK 的许可和声明；随发布包附带的 scrcpy 许可位于 `tools\scrcpy\LICENSE.txt`。
 

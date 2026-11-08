@@ -4,3 +4,5 @@
 *.yml text eol=lf
 *.md text eol=lf
 *.manifest text eol=crlf
+*.svg text eol=lf
+*.ico binary

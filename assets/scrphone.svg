@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="ScrPhone 应用图标">
+  <defs>
+    <linearGradient id="tile" x1="24" y1="18" x2="228" y2="238" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3c9cff"/>
+      <stop offset="0.58" stop-color="#1768df"/>
+      <stop offset="1" stop-color="#1744a8"/>
+    </linearGradient>
+    <linearGradient id="phone" x1="155" y1="104" x2="211" y2="209" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d9eeff"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#tile)"/>
+  <path d="M54 60h119a15 15 0 0 1 15 15v88a15 15 0 0 1-15 15H54a15 15 0 0 1-15-15V75a15 15 0 0 1 15-15Z" fill="#0c3e9a" fill-opacity=".26" stroke="#ffffff" stroke-width="10"/>
+  <path d="M44 86h139" fill="none" stroke="#ffffff" stroke-opacity=".65" stroke-width="8"/>
+  <path d="M74 204h67M107 179v25" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+  <rect x="142" y="97" width="78" height="121" rx="18" fill="#1249a5"/>
+  <rect x="148" y="101" width="66" height="112" rx="14" fill="url(#phone)"/>
+  <rect x="167" y="108" width="28" height="5" rx="2.5" fill="#3274d1"/>
+  <rect x="155" y="119" width="52" height="75" rx="5" fill="#8dc9ff"/>
+  <path d="M173 202h16" stroke="#3274d1" stroke-width="5" stroke-linecap="round"/>
+</svg>

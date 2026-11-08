@@ -19,7 +19,7 @@ namespace PhoneLauncher {
     ListBox devices = new ListBox(), appList = new ListBox(); TextBox search = new TextBox(), log = new TextBox(), width = new TextBox(), height = new TextBox(), dpi = new TextBox();
     Label status = new Label(), selected = new Label(), dependencies = new Label(); ComboBox mode = new ComboBox(), mouse = new ComboBox();
     CheckBox flex = new CheckBox(), keep = new CheckBox(), uhid = new CheckBox(), ime = new CheckBox(), screenOff = new CheckBox();
-    Button launch, stop, refreshApps, restore, refreshDeviceButton; FlowLayoutPanel deviceTiles; string deviceTilesSignature=""; Label deviceFeedback = new Label(), actionFeedback = new Label(); bool lastDeviceRefreshSuccess, lastAppsRefreshSuccess; Label connection = new Label(), appState = new Label(); bool busy, loadingApps, refreshingDevices, changingDevices; int deviceGeneration; float uiScale; TableLayoutPanel shellLayout; Panel[] settingsPages; Panel workspace, settingsHost; readonly List<Button> navButtons = new List<Button>(); FlowLayoutPanel recentPanel; AppGrid appGrid; Label historyState = new Label(); readonly List<RecentItem> recent = new List<RecentItem>();
+    Button launch, stop, refreshApps, restore, refreshDeviceButton; FlowLayoutPanel deviceTiles; string deviceTilesSignature=""; Label deviceFeedback = new Label(), actionFeedback = new Label(); bool lastDeviceRefreshSuccess, lastAppsRefreshSuccess; Label connection = new Label(), appState = new Label(); bool busy, loadingApps, refreshingDevices, changingDevices; int deviceGeneration, navigationRevision; float uiScale; TableLayoutPanel shellLayout; Panel[] settingsPages; Panel workspace, settingsHost; readonly List<Button> navButtons = new List<Button>(); FlowLayoutPanel recentPanel; AppGrid appGrid; Label historyState = new Label(); readonly List<RecentItem> recent = new List<RecentItem>();
     // Keep native frame styles so DWM can draw the outer border and shadow.
     protected override CreateParams CreateParams {
       get { var parameters = base.CreateParams; parameters.Style |= 0x00C40000; return parameters; }
@@ -31,11 +31,20 @@ namespace PhoneLauncher {
     protected override void OnActivated(EventArgs e) { base.OnActivated(e); ApplyWindowFrame(true); }
     protected override void OnDeactivate(EventArgs e) { base.OnDeactivate(e); ApplyWindowFrame(false); }
     public MainForm() {
-      AutoScaleDimensions = new SizeF(96F,96F); AutoScaleMode = AutoScaleMode.Dpi; Text = "手机应用启动器"; FormBorderStyle=FormBorderStyle.None; float displayScale; using(var display=Graphics.FromHwnd(IntPtr.Zero)) displayScale=display.DpiX/96F; uiScale=displayScale; MinimumSize = new Size((int)Math.Round(900*displayScale), (int)Math.Round(600*displayScale)); Size = MinimumSize; StartPosition = FormStartPosition.CenterScreen; Font = new Font("Microsoft YaHei UI", 9F); Padding=new Padding((int)Math.Ceiling(6*displayScale));
+      AutoScaleDimensions = new SizeF(96F,96F); AutoScaleMode = AutoScaleMode.Dpi; Text = "ScrPhone"; Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath); FormBorderStyle=FormBorderStyle.None; float displayScale; using(var display=Graphics.FromHwnd(IntPtr.Zero)) displayScale=display.DpiX/96F; uiScale=displayScale; MinimumSize = new Size((int)Math.Round(900*displayScale), (int)Math.Round(600*displayScale)); Size = MinimumSize; StartPosition = FormStartPosition.CenterScreen; Font = new Font("Microsoft YaHei UI", 9F); Padding=new Padding((int)Math.Ceiling(6*displayScale));
       configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml"); cfg = LoadConfig();
       if (String.IsNullOrWhiteSpace(cfg.Adb)) cfg.Adb = Path.Combine(toolsPath, "adb.exe");
       if (String.IsNullOrWhiteSpace(cfg.Scrcpy)) cfg.Scrcpy = Path.Combine(toolsPath, "scrcpy.exe");
-      LoadHistory(); BuildUI(); InstallTopDrag(this); ApplyConfig(); UpdateDependencies(); var deviceTimer=new System.Windows.Forms.Timer { Interval=10000 }; deviceTimer.Tick+=async(s,e)=>await RefreshDevices(); Shown += async (s,e) => { ApplyBackdrop(); await RefreshDevices(); if (!IsDisposed && !Disposing) deviceTimer.Start(); };
+      LoadHistory(); BuildUI(); InstallTopDrag(this); ApplyConfig(); UpdateDependencies(); var deviceTimer=new System.Windows.Forms.Timer { Interval=10000 }; deviceTimer.Tick+=async(s,e)=>await RefreshDevices(); Shown += async (s,e) => {
+        ApplyBackdrop();
+        int initialNavigationRevision = navigationRevision;
+        await RefreshDevices();
+        if (IsDisposed || Disposing) return;
+        // Do not override a page the user selected while device discovery was running.
+        if (navigationRevision == initialNavigationRevision && !devices.Items.Cast<Device>().Any(device => device.State == "device"))
+          ShowSettings(0);
+        deviceTimer.Start();
+      };
       FormClosing += (s,e) => { deviceTimer.Stop(); deviceTimer.Dispose(); SaveConfig(); try { if (session != null && !session.HasExited) session.CloseMainWindow(); } catch (InvalidOperationException) { } };
     }
     public void ToggleWindowMaximized(){if(WindowState==FormWindowState.Maximized)WindowState=FormWindowState.Normal;else{MaximizedBounds=Screen.FromControl(this).WorkingArea;WindowState=FormWindowState.Maximized;}}
